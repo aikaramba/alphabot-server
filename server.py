@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from AlphaBot import AlphaBot
 
 alphaBot = AlphaBot();
+alphaBot.stop();
 response = {'status': u'ok'};
 
 app = Flask(__name__)
