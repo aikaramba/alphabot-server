@@ -35,7 +35,7 @@ def stop():
 @app.route('/set_pwma', methods=['GET'])
 def setPWMA():
     if request.args.get('dc') >= 0 and request.args.get('dc') <= 100:
-        alphaBot.setPWMA(request.args.dc)
+        alphaBot.setPWMA(request.args.get('dc'))
     return jsonify(response)
 
 @app.route('/set_pwmb', methods=['GET'])
