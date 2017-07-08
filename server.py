@@ -37,11 +37,25 @@ def stop():
 def setPWMA():
     dcValue = request.args.get('dc')
     if dcValue >= 10 and dcValue <= 90:
-        alphaBot.setSA(dcValue)
+        alphaBot.PWMA(dcValue)
     return jsonify(response)
 
 @app.route('/set_pwmb', methods=['GET'])
 def setPWMB():
+    dcValue = request.args.get('dc')
+    if dcValue >= 10 and dcValue <= 90:
+        alphaBot.setPWMB(dcValue)
+    return jsonify(response)
+
+@app.route('/set_sa', methods=['GET'])
+def setSA():
+    dcValue = request.args.get('dc')
+    if dcValue >= 10 and dcValue <= 90:
+        alphaBot.setSA(dcValue)
+    return jsonify(response)
+
+@app.route('/set_sb', methods=['GET'])
+def setSB():
     dcValue = request.args.get('dc')
     if dcValue >= 10 and dcValue <= 90:
         alphaBot.setSB(dcValue)
