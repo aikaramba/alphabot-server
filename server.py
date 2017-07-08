@@ -37,14 +37,14 @@ def stop():
 def setPWMA():
     dcValue = request.args.get('dc')
     if dcValue >= 10 and dcValue <= 90:
-        alphaBot.setPWMA(dcValue)
+        alphaBot.setSA(dcValue)
     return jsonify(response)
 
 @app.route('/set_pwmb', methods=['GET'])
 def setPWMB():
     dcValue = request.args.get('dc')
     if dcValue >= 10 and dcValue <= 90:
-        alphaBot.setPWMB(dcValue)
+        alphaBot.setSB(dcValue)
     return jsonify(response)
 
 @app.route('/reboot', methods=['GET'])

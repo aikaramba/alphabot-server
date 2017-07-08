@@ -4,35 +4,45 @@ from threading import Timer
 
 class AlphaBot(object):
 
-	def __init__(self,in1=12,in2=13,ena=22,in3=20,in4=21,enb=27):
+	def __init__(self,in1=12,in2=13,ena=6,in3=20,in4=21,enb=16,sa=22,sb=27):
 		self.IN1 = in1
 		self.IN2 = in2
 		self.IN3 = in3
 		self.IN4 = in4
 		self.ENA = ena
 		self.ENB = enb
+		self.SA = sa
+		self.SB = sb
 
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setwarnings(False)
+
 		GPIO.setup(self.IN1,GPIO.OUT)
 		GPIO.setup(self.IN2,GPIO.OUT)
 		GPIO.setup(self.IN3,GPIO.OUT)
 		GPIO.setup(self.IN4,GPIO.OUT)
 		GPIO.setup(self.ENA,GPIO.OUT)
 		GPIO.setup(self.ENB,GPIO.OUT)
-		self.forward()
-		self.PWMA = GPIO.PWM(self.ENA,100)
-		self.PWMB = GPIO.PWM(self.ENB,100)
+
+		self.stop()
+
+		self.PWMA = GPIO.PWM(self.ENA,500)
+		self.PWMB = GPIO.PWM(self.ENB,500)
 		self.PWMA.start(50)
-		self.PWMA_stopTimer = Timer(1, self.PWMA_stop)
 		self.PWMB.start(50)
-		self.PWMB_stopTimer = Timer(1, self.PWMB_stop)
 
-	def PWMA_stop(self):
-		self.PWMA.stop()
+		self.SA = GPIO.PWM(self.ENA,500)
+		self.SA.start(50)
+		self.SA_stopTimer = Timer(1, self.SA_stop)
+		self.SB = GPIO.PWM(self.ENB,500)
+		self.SB.start(50)
+		self.SB_stopTimer = Timer(1, self.SB_stop)
 
-	def PWMB_stop(self):
-		self.PWMB.stop()
+	def SA_stop(self):
+		self.SA.stop()
+
+	def SB_stop(self):
+		self.SB.stop()
 
 	def forward(self):
 		GPIO.output(self.IN1,GPIO.HIGH)
@@ -78,11 +88,17 @@ class AlphaBot(object):
 
 	def setPWMA(self,value):
 		self.PWMA.ChangeDutyCycle(value)
-		self.PWMA_stopTimer.start()
 
 	def setPWMB(self,value):
 		self.PWMB.ChangeDutyCycle(value)
-		self.PWMB_stopTimer.start()
+
+	def setSA(self,value):
+		self.SA.ChangeDutyCycle(value)
+		self.SA_stopTimer.start()
+
+	def setSB(self,value):
+		self.SB.ChangeDutyCycle(value)
+		self.SB_stopTimer.start()
 
 	def setMotor(self, left, right):
 		if((right >= 0) and (right <= 100)):
