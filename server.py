@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from AlphaBot import AlphaBot
+import os
 
 alphaBot = AlphaBot();
 alphaBot.stop();
@@ -34,16 +35,22 @@ def stop():
 
 @app.route('/set_pwma', methods=['GET'])
 def setPWMA():
-    if request.args.get('dc') >= 0 and request.args.get('dc') <= 100:
-        alphaBot.setPWMA(request.args.get('dc'))
+    dcValue = request.args.get('dc')
+    if dcValue >= 10 and dcValue <= 90:
+        alphaBot.setPWMA(dcValue)
     return jsonify(response)
 
 @app.route('/set_pwmb', methods=['GET'])
 def setPWMB():
-    if request.args.get('dc') >= 0 and request.args.get('dc') <= 100:
-        alphaBot.setPWMB(request.args.get('dc'))
+    dcValue = request.args.get('dc')
+    if dcValue >= 10 and dcValue <= 90:
+        alphaBot.setPWMB(dcValue)
     return jsonify(response)
 
+@app.route('/reboot', methods=['GET'])
+def reboot():
+    os.system('reboot')
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=3001, debug=False)
