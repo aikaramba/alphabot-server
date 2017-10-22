@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Jump!</title>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+      background-color: #070707;
+    }
+    .container {
+      height: 10em;
+    }
+    .row {
+      width: 100%;
+    }
+    .button {
+      display: inline-block;
+      position: relative;
+      width: 2em;
+      height: 2em;
+      background-color: #010101;
+      z-index: 10;
+      text-align: center;
+      vertical-align: bottom;
+      font-weight: bold;
+      font-family: Arial;
+      padding: 0.5em;
+      font-size: 3em;
+      color: white;
+      overflow: visible;
+    }
+    .active {
+      background-color: #55DD55;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class='row'>
+      <div class='button'></div>
+      <div id='fwd_btn' class='button top active'>
+        /\
+      </div>
+      <div class='button'></div>
+    </div>
+    <div class='row'>
+      <div id='l_btn' class='button left active'>
+        <
+      </div>
+      <div id='stop_btn' class='button stop active'>
+        X
+      </div>
+      <div id='r_btn' class='button right active'>
+        >
+      </div>
+    </div>
+    <div class='row'>
+      <div class='button'></div>
+      <div id='back_btn' class='button bot active'>
+        \/
+      </div>
+      <div class='button'></div>
+    </div>
+  </div>
+  <script>
+    function getQueryString(field, url) {
+      const href = url ? url : window.location.href;
+      const reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+      const string = reg.exec(href);
+      return string ? string[1] : null;
+    }
+    function sendSignal(val){
+      axios.get('/' + val)
+        .then(() => {})
+        .catch(console.error);
+    }
+    function init() {
+      const device = getQueryString('device');
+      const fwd_btn = document.getElementById("fwd_btn");
+      const back_btn = document.getElementById("back_btn");
+      const r_btn = document.getElementById("r_btn");
+      const l_btn = document.getElementById("l_btn");
+      const stop_btn = document.getElementById("stop_btn");
+
+      let downFnName = '';
+      let upFnName = '';
+      if(device === 'desktop') {
+        downFnName = 'onmousedown';
+        upFnName = 'onmouseup';
+      } else {
+        downFnName = 'ontouchstart';
+        upFnName = 'ontouchend';
+      }
+      /** forward */
+      fwd_btn[downFnName] = sendSignal.bind(this, 'forward');
+      fwd_btn[upFnName] = sendSignal.bind(this, 'stop');
+      /** right */
+      r_btn[downFnName] = sendSignal.bind(this, 'right');
+      r_btn[upFnName] = sendSignal.bind(this, 'stop');
+      /** left */
+      l_btn[downFnName] = sendSignal.bind(this, 'left');
+      l_btn[upFnName] = sendSignal.bind(this, 'stop');
+      /** backward */
+      back_btn[downFnName] = sendSignal.bind(this, 'backward');
+      back_btn[upFnName] = sendSignal.bind(this, 'stop');
+      /** stop */
+      stop_btn[downFnName] = sendSignal.bind(this, 'stop');
+    }
+    init();
+  </script>
+</body>
+</html>

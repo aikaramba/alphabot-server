@@ -6,7 +6,15 @@ alphaBot = AlphaBot();
 alphaBot.stop();
 response = {'status': u'ok'};
 
+indexPageData = ""
+with open('./index.html', 'r') as myfile:
+    indexPageData = myfile.read()
+
 app = Flask(__name__)
+
+@app.route('/', methods=['GET'])
+def index():
+    return indexPageData
 
 @app.route('/forward', methods=['GET'])
 def forward():
